@@ -11,5 +11,5 @@ RAG POC Setup
 	pip install pypdf, langchain, chromadb, pytest, tkinter
 6. Add a new file in data folder or use existing file
 7. Run populate_database.py (embeds and adds docs to vector DB)
-8. Run chatUI.py and enter question (since it is local llama, it takes lot of time for response)
+8. Run app.py and enter question (since it is local llama, it takes lot of time for response)
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG ChatGPT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        #questionInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #submitBtn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #responseText {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RAG ChatGPT</h1>
+        <input type="text" id="questionInput" placeholder="Ask a question...">
+        <button id="submitBtn">Submit</button>
+        <div id="chatHistory"></div>
+        <div id="loading">
+            <img src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="Loading...">
+        </div>
+    </div>
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            getResponse();
+        });
+
+        document.getElementById('questionInput').addEventListener('keypress', function(event) {
+            if (event.keyCode === 13) {
+                getResponse();
+            }
+        });
+
+        function getResponse() {
+            var question = document.getElementById('questionInput').value.trim();
+            if (question !== '') {
+                displayQuestion(question);
+                showLoading(true);
+                fetch('/get_response', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'question=' + encodeURIComponent(question)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayResponse(data.response);
+                    showLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showLoading(false);
+                });
+                document.getElementById('questionInput').value = ''; // Clear input field
+            } else {
+                alert('Please enter a question.');
+            }
+        }
+
+        function displayQuestion(question) {
+            var chatHistory = document.getElementById('chatHistory');
+            var questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerText = 'You: ' + question;
+            chatHistory.appendChild(questionDiv);
+        }
+
+        function displayResponse(response) {
+            var chatHistory = document.getElementById('chatHistory');
+            var responseDiv = document.createElement('div');
+            responseDiv.className = 'response';
+            responseDiv.innerText = 'ChatGPT: ' + response;
+            chatHistory.appendChild(responseDiv);
+        }
+
+        function showLoading(show) {
+            var loadingDiv = document.getElementById('loading');
+            if (show) {
+                loadingDiv.style.display = 'block';
+            } else {
+                loadingDiv.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
