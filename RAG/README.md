@@ -13,3 +13,6 @@ RAG POC Setup
 7. Run populate_database.py (embeds and adds docs to vector DB)
 8. Run chatUI.py and enter question (since it is local llama, it takes lot of time for response)
 
+
+
+from https://www.youtube.com/watch?v=2TJxpyO3ei4
