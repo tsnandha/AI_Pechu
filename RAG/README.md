@@ -13,3 +13,6 @@ RAG POC Setup
 7. Run populate_database.py (embeds and adds docs to vector DB)
 8. Run app.py and enter question (since it is local llama, it takes lot of time for response)
 
+
+
+![image](https://github.com/tsnandha/AI_Pechu/assets/91715044/c1a4ad64-7124-4b46-9c6e-871d2059ea46)
